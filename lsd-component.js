@@ -41,7 +41,7 @@ AFRAME.registerComponent('lsd-component', {
       baseHueAngle = data.baseHueAngle;
 
     sceneEl.addEventListener('camera-set-active', function(evt) {
-      this.el.setAttribute("lsd-component")
+      //this.el.setAttribute("lsd-component")
       activeCamera = evt.detail.cameraEl.components.camera.camera;
     });
 
