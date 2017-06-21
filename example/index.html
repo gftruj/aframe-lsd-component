@@ -1,0 +1,27 @@
+   
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Hello, WebVR! - A-Frame</title>
+    <meta name="description" content="Hello, WebVR! - A-Frame">
+    <script src="https://rawgit.com/aframevr/aframe/8d60730/dist/aframe-master.min.js"></script>
+    <script src="https://cdn.rawgit.com/gftruj/aframe-lsd-component/4b8bd7b8/lsd-component.js"></script>
+  </head>
+
+<body>
+<a-scene>
+ 
+  <a-box position="0 0 -2"
+   lsd-component="baseHueAngle:90"></a-box>
+  <a-box position="-2 1 0"
+   lsd-component="baseHueAngle:180;lightness:30"></a-box>
+    <a-box position="2 1 0"
+   lsd-component="baseHueAngle:270;saturationOffsetMin:0;saturationOffsetMax:300"></a-box>
+  <a-sky 
+   lsd-component> </a-sky>
+    
+  <a-camera></a-camera>
+  
+</a-scene>  
+</body>
+</html>
