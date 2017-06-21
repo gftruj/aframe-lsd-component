@@ -14,7 +14,7 @@ The color changes according to the Hue Saturation Lighness system, while the hor
 ### Installation
 
 @CDNscript to include:<br>
-`<script src="https://cdn.rawgit.com/gftruj/aframe-lsd-component/4b8bd7b8/lsd-component.js"></script>`
+`<script src="https://cdn.rawgit.com/gftruj/aframe-lsd-component/0d653d4d/dist/lsd-component.js"></script>`
 
 ### Attributes
 
