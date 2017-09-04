@@ -30,6 +30,9 @@ The color changes according to the Hue Saturation Lighness system, while the hor
 | activeCamera         |  'a-camera'  | This selector takes the object to which the component should be corresponding  |
 | performance          |      true    | Change the color either on tick (false), or on component change(true) |
 
+### Example:
+http://vrrocks.pl/experiments/pika/
+
 ### Notes:
 
 * Why component instead of a material ? 
