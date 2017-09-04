@@ -6,7 +6,7 @@ Look around and see how the color is changing, according to the direction You're
 ## Description
 
 The component changes an entity materials color, while moving the camera ( or any oher object )
-Simply put it in a entity : <a-sky lsd-component>
+Simply put it in a entity : `<a-sky lsd-component>`
 
 The color changes according to the Hue Saturation Lighness system, while the horizontal rotation correspond to the hue angle, and the vertical rotation correspond to the saturation value.
 
@@ -14,9 +14,9 @@ The color changes according to the Hue Saturation Lighness system, while the hor
 ### Installation
 
 #### CDN script to include:<br>
-`<script src="https://cdn.rawgit.com/gftruj/aframe-lsd-component/0d653d4d/dist/lsd-component.js"></script>`
+`<script src="https://cdn.rawgit.com/gftruj/aframe-lsd-component/c1782554/dist/lsd-component.js"></script>`
 #### npm 
-`npm install --save aframe-lsd-component`
+`npm install aframe-lsd-component`
 
 ### Attributes
 
@@ -28,7 +28,7 @@ The color changes according to the Hue Saturation Lighness system, while the hor
 | saturationOffsetMin  |      30      | The minimal saturation value when looking down.                             |
 | saturationOffsetMax  |      120     | The maximum saturation value when looking up.         |
 | activeCamera         |  'a-camera'  | This selector takes the object to which the component should be corresponding  |
-
+| performance          |      true    | Change the color either on tick (false), or on component change(true) |
 
 ### Notes:
 
