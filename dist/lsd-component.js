@@ -18,11 +18,21 @@ AFRAME.registerComponent('lsd-component', {
     activeCamera: {
       type: 'selector',
       default: "a-camera"
+    },
+    performance:{
+      type: 'boolean',
+      default: false
     }
   },
   init: function() {
+    console.clear();
+    if(!this.data.activeCamera){
+      let cam = document.createElement("a-camera");
+      this.el.sceneEl.appendChild(cam);
+      this.data.activeCamera = cam;
+    }
+    this.paused = false;
     this.componentChangedListener = this.componentChangedListener.bind(this);
-    this.data.activeCamera.addEventListener('componentchanged', this.componentChangedListener);
 
   },
   update: function(oldData) {
@@ -39,14 +49,17 @@ AFRAME.registerComponent('lsd-component', {
       lightness = data.lightness,
       baseSaturation = data.baseSaturation,
       baseHueAngle = data.baseHueAngle;
-
+    this.pause();
     sceneEl.addEventListener('camera-set-active', function(evt) {
       //this.el.setAttribute("lsd-component")
       activeCamera = evt.detail.cameraEl.components.camera.camera;
     });
 
     el.setAttribute("material", "color", "hsl(" + baseHueAngle + "," + baseSaturation + "%," + lightness + "%)");
-    
+    console.log(data.performance);
+    if(data.performance){
+    this.data.activeCamera.addEventListener('componentchanged', this.componentChangedListener);
+    }
   },
   componentChangedListener: function(evt){
     var el = this.el;
@@ -60,6 +73,8 @@ AFRAME.registerComponent('lsd-component', {
   },
   remove: function() {
     this.data.activeCamera.removeEventListener('componentchanged', this.componentChangedListener)
+    this.paused = true;
+    
   },
   getColor: function(hue, saturation, luminocity) {
     return "hsl(" + hue + "," + Math.round(saturation) + "%," + luminocity + "%)";
@@ -87,9 +102,23 @@ AFRAME.registerComponent('lsd-component', {
   },
   pause: function(){
     this.data.activeCamera.removeEventListener('componentchanged', this.componentChangedListener)
+  
+    
   },
   play: function(){
+    if(this.data.performance){
     this.data.activeCamera.addEventListener('componentchanged', this.componentChangedListener)
+    }
+  },
+  tick: function(){
+    if(!this.data.performance){
+      if(!this.paused){
+        let data = this.data;
+        this.angleCheck(data.activeCamera.getAttribute('rotation'), data.baseHueAngle, data.activeCamera);
+        let saturation = this.setSaturation(data.activeCamera.getAttribute('rotation').x, data.baseSaturation, data.saturationOffsetMin, data.saturationOffsetMax);
+        this.setMaterial(this.el, this.setHue(data.activeCamera.getAttribute('rotation').y, data.baseHueAngle), saturation, data.lightness);
+      }
+    }
   }
   
   
