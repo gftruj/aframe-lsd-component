@@ -31,10 +31,5 @@ The color changes according to the Hue Saturation Lighness system, while the hor
 | performance          |      true    | Change the color either on tick (false), or on component change(true) |
 
 ### Example:
-http://vrrocks.pl/experiments/pika/
+https://aframe-lsd.glitch.me/
 
-### Notes:
-
-* Why component instead of a material ? 
-Afaik, the custom materials don't work with the 'tick' function, I want to implement it, so the color change would be a lot smoother.
-On the other hand I will have to work on the resource usage.
