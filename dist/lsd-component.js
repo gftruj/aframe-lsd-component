@@ -33,7 +33,6 @@ AFRAME.registerComponent('lsd-component', {
     }
     this.paused = false;
     this.componentChangedListener = this.componentChangedListener.bind(this);
-
   },
   update: function(oldData) {
     var self = this;
@@ -51,12 +50,10 @@ AFRAME.registerComponent('lsd-component', {
       baseHueAngle = data.baseHueAngle;
     this.pause();
     sceneEl.addEventListener('camera-set-active', function(evt) {
-      //this.el.setAttribute("lsd-component")
       activeCamera = evt.detail.cameraEl.components.camera.camera;
     });
 
     el.setAttribute("material", "color", "hsl(" + baseHueAngle + "," + baseSaturation + "%," + lightness + "%)");
-    console.log(data.performance);
     if(data.performance){
     this.data.activeCamera.addEventListener('componentchanged', this.componentChangedListener);
     }
@@ -66,10 +63,9 @@ AFRAME.registerComponent('lsd-component', {
     var data = this.data;
     if (evt.detail.name === 'rotation') {
         this.angleCheck(evt.detail.newData, data.baseHueAngle, data.activeCamera);
-        saturation = this.setSaturation(evt.detail.newData.x, data.baseSaturation, data.saturationOffsetMin, data.saturationOffsetMax);
-        this.setMaterial(el, this.setHue(evt.detail.newData.y, data.baseHueAngle), saturation, data.lightness);
+        saturation = this.getSaturation(evt.detail.newData.x, data.baseSaturation, data.saturationOffsetMin, data.saturationOffsetMax);
+        this.setMaterial(el, this.getHue(evt.detail.newData.y, data.baseHueAngle), saturation, data.lightness);
       }
-
   },
   remove: function() {
     this.data.activeCamera.removeEventListener('componentchanged', this.componentChangedListener)
@@ -79,31 +75,22 @@ AFRAME.registerComponent('lsd-component', {
   getColor: function(hue, saturation, luminocity) {
     return "hsl(" + hue + "," + Math.round(saturation) + "%," + luminocity + "%)";
   },
-  angleCheck: function(angle, baseHue, camera) {
-    if (angle.y <= baseHue + 10) {
-      angle.y += 360;
-      camera.setAttribute("rotation", angle);
-    } else if (angle.y > baseHue + 370) {
-      angle.y -= 360;
-      camera.setAttribute("rotation", angle);
-    } else if (angle.y < 0) {
-      angle.y = 0 + baseHue;
-      camera.setAttribute("rotation", angle);
-    }
+  angleCheck: function(angle, baseHue) {
+    this.y = this.absMod(angle.y + baseHue, 360)
   },
-  setSaturation: function(height, base, offsetMin, offsetMax) {
-    return (height > 0) ? (((height / 90) * (offsetMax - base)) + base) : ((height / 90) * (base - offsetMin)) + base
+  getSaturation: function(angle, base, offsetMin, offsetMax) {
+    let offset = angle > 0 ? offsetMax - base : base - offsetMin
+    let saturation = angle * offset + base
+    return saturation > 0 ? saturation : 0
   },
-  setHue: function(angle, baseHue) {
-    return angle + baseHue;
+  getHue: function(angle, baseHue) {
+    return this.absMod(angle + baseHue, 360);
   },
   setMaterial: function(object, hslColor, saturation, luminocity) {
     object.setAttribute("material", "color", this.getColor(hslColor, saturation, luminocity));
   },
   pause: function(){
     this.data.activeCamera.removeEventListener('componentchanged', this.componentChangedListener)
-  
-    
   },
   play: function(){
     if(this.data.performance){
@@ -113,13 +100,13 @@ AFRAME.registerComponent('lsd-component', {
   tick: function(){
     if(!this.data.performance){
       if(!this.paused){
-        let data = this.data;
-        this.angleCheck(data.activeCamera.getAttribute('rotation'), data.baseHueAngle, data.activeCamera);
-        let saturation = this.setSaturation(data.activeCamera.getAttribute('rotation').x, data.baseSaturation, data.saturationOffsetMin, data.saturationOffsetMax);
-        this.setMaterial(this.el, this.setHue(data.activeCamera.getAttribute('rotation').y, data.baseHueAngle), saturation, data.lightness);
+        let rotation = this.data.activeCamera.object3D.rotation;
+        let saturation = this.getSaturation(rotation.x, this.data.baseSaturation, this.data.saturationOffsetMin, this.data.saturationOffsetMax);
+        this.setMaterial(this.el, this.getHue(rotation.y * 180 / Math.PI, this.data.baseHueAngle), saturation, this.data.lightness);
       }
     }
+  },
+  absMod: function(number, n) {
+    return ((number % n) + n) % n;
   }
-  
-  
 });
